@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>知道同步上传</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+	
+	<!-- 引入Bootstrap核心文件 -->
+	<link href="/bootstrap/css/bootstrap.min.css" rel='stylesheet' type='text/css' />
+	
+	<!-- jQuery(Bootstrap的JavaScript插件需要引入jQuery，务必在bootstrap.min.js之前引入) -->
+	<script src="/bootstrap/js/jquery.min.js"></script>
+	
+	<!-- 包括所有已编译的JS插件 -->
+	<script src="/bootstrap/js/bootstrap.min.js"></script>
+	
+	<!-- 图标 -->
+	<link rel="shortcut icon" href="/images/icon.ico">  
+	<link rel="Bookmark" href="/images/icon.ico">
+	
+	<!-- 富文本插件 -->
+	<link rel="stylesheet" href="/kindeditor/themes/default/default.css" />
+	<script charset="utf-8" src="/kindeditor/kindeditor-min.js"></script>
+	<script charset="utf-8" src="/kindeditor/lang/zh_CN.js"></script>
+</head>
+	<script>
+	    //简单模式初始化
+	    var editor;
+	    KindEditor.ready(function(K) {
+	        editor = K.create('textarea[name="content"]', {
+	        resizeType : 1,
+	        allowPreviewEmoticons : false,
+	        allowImageUpload : false,
+	            items : [
+	                    'fontname', 'fontsize', '|', 'forecolor', 'hilitecolor', 'bold', 'italic', 'underline',
+	                    'removeformat', '|', 'justifyleft', 'justifycenter', 'justifyright', 'insertorderedlist',
+	                    'insertunorderedlist', '|', 'emoticons', 'image', 'link']
+	            });
+	   });
+	</script>
+<body style="text-align: center;">
+	<!-- logo -->
+	<div class="row">
+		<div class="col-xs-8 col-xs-offset-2
+				col-sm-4 col-sm-offset-4">
+			<h1 class="logo">
+				<a href="/manage/index"><img alt="" src="/images/logo.png" width="100%"></a>
+			</h1>
+		</div>
+	</div>
+
+	<#if start == "1">
+		<div class="alert alert-success alert-dismissable">
+            <button type="button" class="close" data-dismiss="alert"
+                    aria-hidden="true">
+                &times;
+            </button>
+            	上传成功！
+        </div>
+	<#elseif start == "2">
+		<div class="alert alert-danger alert-dismissable">
+            <button type="button" class="close" data-dismiss="alert"
+                    aria-hidden="true">
+                &times;
+            </button>
+                                  上传失败！
+        </div>
+	</#if>
+	<div class="container">
+		<form class="form-horizontal" id="fm" action="/manage/know" method="post" enctype="multipart/form-data">
+			<fieldset>
+				<legend>“ 知道  ” 同步上传</legend>
+				<input type="hidden" id="uid" name="uid" value="1">
+			</fieldset>
+	    	<div class="form-group">
+				<label for="title" class="col-sm-1 control-label">标题</label>
+				<div class="col-sm-6">
+					<input type="text" class="form-control" id="title" name="title">
+				</div>
+			</div>
+	    	<div class="form-group">
+				<label for="content" class="col-sm-1 control-label">内容</label>
+				<div class="col-sm-11">
+					<textarea id="tc" name="content" style="width:100%;height:500px;visibility:hidden;display: block;"></textarea> 
+				</div>
+			</div>
+	        <div class="form-group">
+				<div class="col-sm-offset-9 col-sm-3">
+					<button type="submit" class="btn btn-default" >同步上传</button>
+				</div>
+			</div>  
+	    </form>
+    </div>
+</body>
+<script type="text/javascript">
+	function addKnows() {
+		if(confirm("确认同步上传？")){
+			$("#fm").submit();
+		}
+	}
+</script>
+</html>

@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+	<title>${book.book_name}章节列表_天狼云文库</title>
+	
+	<!-- 引入Bootstrap核心文件 -->
+	<link href="/bootstrap/css/bootstrap.min.css" rel='stylesheet' type='text/css' />
+	
+	<!-- jQuery(Bootstrap的JavaScript插件需要引入jQuery，务必在bootstrap.min.js之前引入) -->
+	<script src="/bootstrap/js/jquery.min.js"></script>
+	
+	<!-- 包括所有已编译的JS插件 -->
+	<script src="/bootstrap/js/bootstrap.min.js"></script>
+	
+	<!-- 表格JS插件 -->
+	<script src="/bootstrap/js/bootstrap-table.js"></script>
+	<script src="/bootstrap/js/bootstrap-table-zh-CN.js"></script>
+	
+	<!-- 图标 -->
+	<link rel="shortcut icon" href="/images/icon.ico">  
+	<link rel="Bookmark" href="/images/icon.ico">
+	
+	<link href="/tianlang/css/common.css" rel='stylesheet' type='text/css' />
+	<script src="/tianlang/js/common.js"></script>
+</head>
+<style type="text/css">
+	.btn{
+		border: none;
+		font-weight: 700;
+	}
+</style>
+<script type="text/javascript">
+	$(function(){
+		$("#nav_home").removeClass();
+		$("#nav_book").addClass("active");
+	})
+	//页面跳转
+	function page(value) {
+		var valueBI = $('#changeBackgroundColor').children('option:selected').val();
+		var nodeMax = $("#nodeMax").val();
+		var nodeMin = $("#nodeMin").val();
+		var valueBID = $("#valueBID").val();
+		var str = "value=" + value
+				+ "&nodeMax=" + nodeMax
+				+ "&nodeMin=" + nodeMin
+				+ "&valueBID=" + valueBID;
+		location="/client/book/bookContent?"+str;
+	}
+</script>
+<body>
+	<!-- 导航 -->
+	<div id="nav" class="navbar navbar-inverse" role="navigation"></div>
+	
+	<!-- logo -->
+	<div class="jumbotron">
+		<div id="logo">
+			<h1 class="text-center"><a href="/client/book">天狼云<span>文库</span></a></h1>
+			<h3 class="text-center" style="color: black;">
+				${book.book_name}
+				<#if book.isfinish == 1>
+					<small>完结</small>
+				<#else>
+					<small>未完结</small>
+				</#if>
+				
+			</h3>
+		</div>
+	</div><!-- logo END -->
+	
+	<div class="row">
+		<div class="col-xs-12 col-md-10 col-md-offset-1">
+			<input id="valueBID" type="hidden" value="${book.id?c}">
+			<input id="nodeMin" type="hidden" value="${nodeMin?c}">
+			<input id="nodeMax" type="hidden" value="${nodeMax?c}">
+			<#if bookNodeNames?? && (bookNodeNames?size > 0) >
+				<#list bookNodeNames as nodes>
+					<!-- ${nodes.nodeNumber} -->
+					<div class="col-xs-12 col-md-4" style="margin-bottom: 10px;">
+						<button title="${nodes.nodeName}" class="btn btn-lg btn-default" onclick="page('${nodes.nodeNumber?c}')">
+							<#if nodes.nodeName?length gt 16>
+								${nodes.nodeName?substring(0,15)}...
+							<#else>
+								${nodes.nodeName}
+							</#if>
+						</button>
+					</div>	
+				</#list>
+			<#else>
+				<div class="jumbotron">
+			        <h4 class="text-center">未查询到数据</h4>
+				</div>
+	        </#if>
+		</div>
+		
+	</div>
+	
+	<!--footer--->
+	<div id="footer" class="footer text-center"></div>
+</body>
+</html>

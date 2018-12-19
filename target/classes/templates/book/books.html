@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>天狼云书籍管理</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+	
+	<!-- 引入Bootstrap核心文件 -->
+	<link href="/bootstrap/css/bootstrap.min.css" rel='stylesheet' type='text/css' />
+	
+	<!-- jQuery(Bootstrap的JavaScript插件需要引入jQuery，务必在bootstrap.min.js之前引入) -->
+	<script src="/bootstrap/js/jquery.min.js"></script>
+	
+	<!-- 包括所有已编译的JS插件 -->
+	<script src="/bootstrap/js/bootstrap.min.js"></script>
+	
+	<!-- 页面样式 -->
+	<link href="/bootstrap/css/style.css" rel='stylesheet' type='text/css'/>
+	
+	<!-- 图标 -->
+	<link rel="shortcut icon" href="/images/icon.ico">  
+	<link rel="Bookmark" href="/images/icon.ico">
+	
+	<link href="/tianlang/css/common.css" rel='stylesheet' type='text/css' />
+	<script src="/tianlang/js/common.js"></script>	
+</head>
+<style type="text/css">
+	#myAlert {
+		width: 40%;
+		height: 40%;
+		position:fixed;
+	    top:7%;
+	    right:0;
+	    left:0;
+	    margin:auto; 
+	}
+	#msg {
+		margin-top: 10%;
+	}
+</style>
+<body>
+	<div id="logo">
+		<h1 class="text-center"><a href="/client/book">天狼云<span>文库</span></a></h1>
+	</div>
+	
+	<div>
+		<p class="text-center" style="margin-bottom: 20px;">
+			<button class="btn btn-success btn-xs" onclick="page('index')">回到首页</button>
+			<button class="btn btn-success btn-xs" data-toggle="modal" data-target="#uploadBook" onclick="uploadService()">上传书籍</button>
+		</p>
+	</div>
+	
+	<div class="container">
+	<#list books as book>
+		<div class="jumbotron col-md-4">
+			<div class="panel panel-default">
+	    		<div class="panel-heading">
+	       			<h3 class="panel-title">
+		            	${book.book_name}
+		            	<button class="btn btn-success btn-xs" onclick="selectPage('${book.bid}')">查看</button>
+		        	</h3>
+		    	</div>
+			    <div class="panel-body">
+			    	<p class="lead">作者：${book.name}</p>
+			    	<p class="lead">类型：${book.type_name}</p>
+			    	<p class="lead">是否完本：
+			    		<#if (book.isfinish == 1)>
+								完本
+						    <#else>
+								未完本
+						</#if>
+			    	</p>
+			    </div>
+			</div>
+		</div>
+    </#list>
+    </div>
+    
+    <!-- 模态框（Modal） -->
+	<div class="modal fade" id="uploadBook" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	    <div class="modal-dialog">
+	        <div class="modal-content">
+	            <div class="modal-header">
+	                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+	                <h4 class="modal-title" id="myModalLabel">上传书籍</h4>
+	            </div>
+	            <div class="modal-body" style="height: 220px;">
+					<form role="form" id="form" action="/manage/uploadBook" method="post" enctype="multipart/form-data">
+						<div class="form-group">
+							<label for="aid" class="col-xs-4 control-label">作者</label>
+						    <div class="col-xs-8">
+						    	<select class="form-control" name="aid" id="aid">
+							    </select>
+						    </div>
+						</div>
+						<div class="form-group">
+							<label for="tid" class="col-xs-4 control-label">类型</label>
+						    <div class="col-xs-8">
+						    	<select class="form-control" name="tid" id="tid">
+							    </select>
+						    </div>
+						</div>
+						<div class="form-group">
+							<label for="isfinish" class="col-xs-4 control-label">是否完本</label>
+						    <div class="col-xs-8">
+						    	<select class="form-control" name="isfinish" id="isfinish">
+								    <option value="1">完本</option>
+								    <option value="2">未完本</option>
+							    </select>
+						    </div>
+						</div>
+						<div class="form-group">
+							<label for="bookName" class="col-xs-4 control-label">书籍名称</label>
+						    <div class="col-xs-8">
+						    	<input type="text" name="bookName" id="bookName" class="form-control" placeholder="书籍名称">
+						    </div>
+						</div>
+						<div class="form-group">
+							<label for="file" class="col-xs-4 control-label">书籍文件</label>
+						    <div class="col-xs-8">
+						    	<input type="file" name="file" id="file">
+						    </div>
+						</div>
+					</form>
+				</div>
+	            <div class="modal-footer">
+	                <button class="btn btn-default" data-dismiss="modal">关闭</button>
+	                <button class="btn btn-primary" onclick="uploadBook()">上传</button>
+	            </div>
+	        </div><!-- /.modal-content -->
+	    </div><!-- /.modal -->
+	</div>
+	
+	
+	<!-- 模态框（Modal） -->
+	<div class="modal fade" id="uploadModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	    <div class="modal-dialog">
+	        <div class="modal-content">                            
+	            <div class="modal-body">
+	                <div id='modal_message' style="text-align: center"><h2>正在上传中.....</h2></div>
+	                <div class="progress progress-striped active">
+	                    <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="60" 
+	                        aria-valuemin="0" aria-valuemax="100" style="width: 100%;">
+	                        <span class="sr-only">100% 完成</span>
+	                    </div>
+	                </div>
+	            </div>
+	        </div><!-- /.modal-content -->
+	    </div><!-- /.modal -->
+	</div>
+	
+	<div id="myAlert" class="alert alert-success hidden">
+		<a href="#" class="close" data-dismiss="alert">&times;</a>
+		<h2 id="msg" style="text-align: center;">成功</h2>
+		<button class="btn btn-success" data-dismiss="alert" style="margin: 10%;float: right;">确认</button>
+	</div>
+	<script type="text/javascript">
+		$(function(){
+			$("#myAlert").bind('closed.bs.alert', function () {
+				location.href = "/manage/book";
+			});
+		});
+	</script>  
+</body>
+<script type="text/javascript">
+
+	//居中模态框
+	$('#uploadBook').on('shown.bs.modal', function () {
+	    var $this = $(this);
+	    var dialog = $this.find('.modal-dialog');
+	    var top = ($(window).height() - dialog.height()) / 2;
+	    dialog.css({
+	        marginTop:top
+	    });
+	});
+	function page (value) {
+		location.href = "/manage/"+value;
+	}
+	
+	function uploadService () {
+		$.ajax({
+			url:"/manage/book/uploadBookService",
+	        type: 'GET',
+	       	dataType: "json",
+	        success: function (data) {   //成功后回调
+	        	if(data != null){
+	        		var authors = data["authotList"];
+	        		var types = data["bookTypeList"];
+	        		$("#aid").empty();
+	        		$("#tid").empty();
+	        		for(i in authors){
+	        			$("#aid").append("<option value='"+authors[i].aid+"'>"+authors[i].name+"</option>");
+	        		}
+	        		for(i in types){
+	        			$("#tid").append("<option value='"+types[i].tid+"'>"+types[i].typeName+"</option>");
+	        		}
+	        	} else {
+	        		alert("暂时还不能上传");
+	        		location.href = "/manage/book";
+	        	}
+	        },
+	        error: function (data) {
+	        	if(data){
+	        		alert("暂时还不能上传");
+	        		location.href = "/manage/book";
+	        	}
+	        }
+		});
+	}
+	function uploadBook () {
+		$("#uploadModal").modal("show");
+		$("#uploadBook").modal("hide");
+		var formData = new FormData($('#form')[0]);
+		$.ajax({
+            url: "/manage/book/uploadBook",
+            type: "POST",
+            data: formData,
+            cache:false,
+            traditional: true,
+            /**
+             *必须false才会自动加上正确的Content-Type
+             */
+            contentType: false,
+            /**
+             * 必须false才会避开jQuery对 formdata 的默认处理
+             * XMLHttpRequest会对 formdata 进行正确的处理
+             */
+            processData: false,
+            success: function (data) {
+            	$("#uploadModal").modal("hide");
+            	$('#uploadModal').on('hidden.bs.modal', function () {
+            		$("#msg").empty();
+            		$("#msg").append(data.msg);
+            		if (data.status == "1") {
+            			$("#myAlert").attr("class","alert alert-success");
+            		};
+            		if (data.status == "0") {
+            			$("#myAlert").attr("class","alert alert-danger");
+            		};
+            	})
+            },
+            error: function (data) {
+                if(data){
+                	$("#uploadModal").modal("hide");
+                	$('#uploadModal').on('hidden.bs.modal', function () {
+                		$("#msg").empty();
+                		$("#msg").append(data.msg);
+                		$("#myAlert").attr("class","alert alert-danger");
+                	})
+                }
+            }
+        });
+	}
+	
+	function selectPage(value){
+		location="/client/book/bookNodeNames?value="+value;
+	}
+</script>
+</html>

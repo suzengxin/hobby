@@ -1,0 +1,66 @@
+html, body{
+	font-family: 'Raleway', sans-serif;
+	font-size: 100%;
+	background: #FFf;
+	margin: 0 auto;
+	padding:0;
+}
+a:hover{
+	color:red;
+	text-decoration:underline;
+}
+/* nav */
+#nav .navbar-toggle {
+	border: none;
+}
+
+#nav span {
+	margin-right: 5px;
+}
+
+#nav ul li a {
+	text-align:center;
+	font-size: 15px;
+	font-weight: 600;
+}
+
+/* logo */
+#logo h1 a{
+	font-size: 1em;
+	color: #5bb2fc;
+	font-family: 'Fugaz One', cursive;
+}
+#logo h1 a span{
+	color: #fec63f;
+}
+#logo h1 a:hover{
+	text-decoration: none;
+}
+
+/*--footer--*/
+.footer {
+	width:100%;
+	background: #29292A;
+    padding: 2em 0 1em;
+	text-align:left;
+}
+.footer-grids h3{
+	color: #fec63f;
+	font-size: 1.4em;
+	font-weight: 400;
+	text-decoration: none;
+	line-height: 1.4em;
+	font-family: 'Fugaz One', cursive;
+	margin:0.6em 0;
+}
+.footer-grids p {
+	font-size: 0.9em;
+	color: #fff;
+	line-height: 1.8em;
+}
+.footer-text {
+	float: left;
+}
+.footer-info {
+  float: right;
+}

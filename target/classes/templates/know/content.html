@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>${know.title}_天狼云社区</title>
+
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+	
+	<!-- 引入Bootstrap核心文件 -->
+	<link href="/bootstrap/css/bootstrap.min.css" rel='stylesheet' type='text/css' />
+	
+	<!-- jQuery(Bootstrap的JavaScript插件需要引入jQuery，务必在bootstrap.min.js之前引入) -->
+	<script src="/bootstrap/js/jquery.min.js"></script>
+	
+	<!-- 包括所有已编译的JS插件 -->
+	<script src="/bootstrap/js/bootstrap.min.js"></script>
+	
+	<!-- 图标 -->
+	<link rel="shortcut icon" href="/images/icon.ico">  
+	<link rel="Bookmark" href="/images/icon.ico">
+	<link href="/tianlang/css/common.css" rel='stylesheet' type='text/css' />
+	<script src="/tianlang/js/common.js"></script>
+
+</head>
+<body>
+	<!-- 导航 -->
+	<div id="nav" class="navbar navbar-inverse" role="navigation"></div>
+	
+	<!-- logo -->
+	<div id="logo" class="col-xs-12">
+		<h1 class="text-center"><a href="/client/know">天狼云<span>社区</span></a></h1>
+	</div>
+	
+	<!-- content -->
+	<div class="row" style="margin-top: 20px; color: black;">
+		<div id="content" class="col-xs-10 col-xs-offset-1">
+			<h1 class="text-center">${know.title}</h1>
+			<div class="lead">${know.content}</div>
+		</div>
+	</div>
+	
+	<!--footer--->
+	<div id="footer" class="footer text-center" style="margin-top: 20px;"></div>
+</body>
+<style type="text/css">
+	#content {
+		border:2px #78cdd1 solid;
+		border-top-left-radius: 20px;   
+		border-top-right-radius: 20px;   
+		border-bottom-left-radius: 20px;  
+		border-bottom-right-radius: 20px;
+		background-color: #afdfe4;
+	}
+</style>
+<script type="text/javascript">
+$(function(){
+	$("#nav_home").removeClass();
+	$("#nav_know").addClass("active");
+})
+</script>
+</html>

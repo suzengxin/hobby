@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>${title}知识库</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+	
+	<!-- 引入Bootstrap核心文件 -->
+	<link href="/bootstrap/css/bootstrap.min.css" rel='stylesheet' type='text/css' />
+	
+	<!-- jQuery(Bootstrap的JavaScript插件需要引入jQuery，务必在bootstrap.min.js之前引入) -->
+	<script src="/bootstrap/js/jquery.min.js"></script>
+	
+	<!-- 包括所有已编译的JS插件 -->
+	<script src="/bootstrap/js/bootstrap.min.js"></script>
+	
+	<!-- 图标 -->
+	<link rel="shortcut icon" href="/images/icon.ico">  
+	<link rel="Bookmark" href="/images/icon.ico">
+		
+	<link href="/tianlang/css/style1.css" rel='stylesheet' type='text/css' />
+</head>
+<body style="text-align: center;">
+	<div class="col-sm-12">
+		<table>
+			<tr>
+				<th colspan="7" style="font-size: 20px;">
+					${title}知识库<br>
+					<button>
+						<a href="/manage/index">返回管理首页</a>
+					</button>
+				</th>
+			</tr>
+			<tr>
+				<td>ID</td>
+				<td>UID</td>
+				<td>标题</td>
+				<td>内容</td>
+				<td>创建时间</td>
+				<td>修改时间</td>
+				<td>操作</td>
+			</tr>
+			<#list knows as k>
+				<tr>
+					<td>${k.id}</td>
+					<td>${k.uid}</td>
+					<td>${k.title}</td>
+					<td>${k.content}</td>
+					<td>${k.createTime}</td>
+					<td>${k.updateTime}</td>
+					<td>
+						<button type="button" class="btn btn-xs btn-danger" onclick="deleteKnowByID('${k.id}')">删除</button>
+					</td>
+				</tr>
+			</#list>
+			<tr>
+				<td colspan="7">
+					<button type="button" class="btn btn-xs btn-default" onclick="">上一页</button>
+					<button type="button" class="btn btn-xs btn-default" onclick="">下一页</button>
+				</td>
+			</tr>
+		</table>
+	</div>
+</body>
+<script type="text/javascript">
+	function deleteKnowByID (id) {
+		var type = '${title}';
+		if(confirm("确认删除本条数据吗？")){
+			$.ajax({
+				url:"/manage/know/"+id,
+		        type: 'DELETE',
+		       	dataType: "text",
+		        success: function (data) {
+		        	alert(data);
+		        	location="/manage/know/"+type;
+		        },
+		        error: function (data) {
+		        	
+		        }
+			});
+		}
+	}
+</script>
+</html>

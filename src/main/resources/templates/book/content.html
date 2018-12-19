@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+	<title>${bookContent.nodeName}_天狼云文库</title>
+	
+	<!-- 引入Bootstrap核心文件 -->
+	<link href="/bootstrap/css/bootstrap.min.css" rel='stylesheet' type='text/css' />
+	
+	<!-- jQuery(Bootstrap的JavaScript插件需要引入jQuery，务必在bootstrap.min.js之前引入) -->
+	<script src="/bootstrap/js/jquery.min.js"></script>
+	
+	<!-- 包括所有已编译的JS插件 -->
+	<script src="/bootstrap/js/bootstrap.min.js"></script>
+	
+	<!-- 表格JS插件 -->
+	<script src="/bootstrap/js/bootstrap-table.js"></script>
+	<script src="/bootstrap/js/bootstrap-table-zh-CN.js"></script>
+	
+	<!-- 图标 -->
+	<link rel="shortcut icon" href="/images/icon.ico">  
+	<link rel="Bookmark" href="/images/icon.ico">
+	
+	<!-- 页面样式 -->
+	<link href="/tianlang/css/common.css" rel='stylesheet' type='text/css' />
+	<script src="/tianlang/js/common.js"></script>
+</head>
+
+<style type="text/css">
+	.content{
+		text-indent:2em;
+		font-size: 22px;
+	}
+</style>
+<script type="text/javascript">
+	$(function(){
+		loadSize();
+		loadColor();
+	});
+	
+	function page (nodeNumber,start){
+		var nodeMax = $("#nodeMax").val();
+		var nodeMin = $("#nodeMin").val();
+		var valueBID = $("#valueBID").val();
+		
+		if(start == "node"){
+			location="/client/book/bookNodeNames?value="+valueBID;
+		} else {
+			var value = nodeNumber;
+			if(start=="prev"){
+				if(nodeNumber == nodeMin){
+					value = nodeMax;
+				}else{
+					value = parseInt(value) - 1;
+				}
+			}
+			
+			if(start=="next"){
+				if(nodeNumber == nodeMax){
+					value = nodeMin;
+				}else{
+					value = parseInt(value) + 1;
+				}
+			}
+			
+			var str = "value=" + value
+					+ "&nodeMax=" + nodeMax
+					+ "&nodeMin=" + nodeMin
+					+ "&valueBID=" + valueBID;
+			location="/client/book/bookContent?"+str;
+		}
+		
+	};
+	
+	document.addEventListener('touchstart',touch, false);
+    function touch (event){  
+        var event = event || window.event;
+      	//获取点击屏幕x坐标
+		var x = event.touches[0].clientX;
+		//获取点击屏幕y坐标
+		var y = event.touches[0].clientY;
+		//获取浏览器宽度
+		var w = document.documentElement.clientWidth;
+		//获取浏览器高度
+		var h = document.documentElement.clientHeight;
+		
+		//设置点击区域
+		var wx1 = w / 2 - w * 0.1;
+		var wx2 = w / 2 + w * 0.1;
+		var hy1 = h / 2 - h * 0.1;
+		var hy2 = h / 2 + h * 0.1;
+		if (wx1 <= x && x <= wx2 && hy1 <= y && y <= hy2) {
+			//alert("w="+w+"h="+h+"x="+x+"y="+y);
+			var text = $('#theme').css("display");
+			if(text=="none"){
+				$('#theme').show();
+				$('#leftButton').show();
+				$('#rightButton').show();
+			} else {
+				$('#theme').hide();
+				$('#leftButton').hide();
+				$('#rightButton').hide();
+			}
+		} else if ( y <= h * 0.75) {
+			
+			var wl = w*0.15;
+			var wr = w*0.85;
+			
+			var h1 = h*0.45;//按钮上顶点
+			var h2 = h * 0.6;//按钮下顶点
+			
+			if(!(h1<=y&&y<=h2&&x<=wl) && !(h1<=y&&y<=h2&&x>=wr)){
+				$('#theme').hide();
+				$('#leftButton').hide();
+				$('#rightButton').hide();
+			}
+			
+		} else {
+			//其他不处理
+		}
+   	}
+    
+    function themeShow(){
+    	$("#size_div").css("margin-top","10px");
+    	$("#color_one").css("margin-top","5px");
+    	$("#color_two").css("margin-top","5px");
+    	$("#color_three").css("margin-top","5px");
+    	$('#theme').show();
+    }
+    
+    function themeHide(){
+    	$('#theme').hide();
+    }
+</script>
+<body>
+	<!-- 导航 -->
+	<div id="nav" class="navbar navbar-inverse" role="navigation"></div>
+	
+	<!-- logo -->
+	<div class="jumbotron">
+		<div id="logo">
+			<h1 class="text-center"><a href="/client/book">天狼云<span>文库</span></a></h1>
+			<p class="text-center hidden-xs hidden-sm">
+				<button onclick="themeShow()" class="btn btn-xs">修改字体背景</button>
+			</p>
+		</div>
+	</div><!-- logo END -->
+	
+	<div class="row" id="main" style="margin:0px 1px 20px 1px;">
+		<div class="col-xs-12 col-md-10 col-md-offset-1">
+			<h3 style="margin-top: 20px;margin-bottom: 20px;text-align: center;">${bookContent.nodeName}</h3>
+			<div class="lead" id="content">${bookContent.nodeContent}</div>
+			<input id="nodeMin" type="hidden" value="${nodeMin?c}">
+			<input id="nodeMax" type="hidden" value="${nodeMax?c}">
+			<input id="valueBID" type="hidden" value="${valueBID?c}">
+			<div class="row">
+				<div class="col-xs-4" style="text-align: center;">
+					<button type="button" class="btn-sm btn-primary" onclick="page('${bookContent.nodeNumber?c}','prev')">上一章</button>
+				</div>
+				<div class="col-xs-4" style="text-align: center;">
+					<button type="button" class="btn-sm btn-primary" onclick="page('','node')">目录</button>
+				</div>
+				<div class="col-xs-4" style="text-align: center;">
+					<button type="button" class="btn-sm btn-primary" onclick="page('${bookContent.nodeNumber?c}','next')">下一章</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	<!--footer--->
+	<div id="footer" class="footer text-center"></div>
+	
+	<!-- 菜单章节跳转按钮 -->
+	<div id="leftButton" style="display: none;width: 15%;height: 15%;z-index:1;position: fixed;bottom: 40%;left: 0px;">
+		<button onclick="page('${bookContent.nodeNumber?c}','prev')" class="btn btn-sm btn-primary btn-block">
+			<p>上</p><br><p>一</p><br><p>章</p>
+		</button>
+	</div>
+	<div id="rightButton" style="display: none;width: 15%;height: 15%;z-index:1;position: fixed;bottom: 40%;right: 0px;">
+		<button onclick="page('${bookContent.nodeNumber?c}','next')" class="btn btn-sm btn-primary btn-block">
+			<p>下</p><br><p>一</p><br><p>章</p>
+		</button>
+	</div>
+	<!-- 菜单主题 -->
+	<div id="theme" style="display: none;background-color: black;width: 100%;height: 25%;z-index:1;position: fixed;bottom: 0px;">
+		<div id="size_div" class="row" style="margin-top: 3%;">
+			<div class="col-xs-4 col-xs-offset-1">
+				<button onclick="changeFontSize('-')" class="btn btn-sm btn-primary btn-block">A-</button>
+			</div>
+			<div class="col-xs-2">
+				<p id="size" class="text-center" style="color: white;font-size: 20px;">22</p>
+			</div>
+			<div class="col-xs-4">
+				<button onclick="changeFontSize('+')" class="btn btn-sm btn-primary btn-block">A+</button>
+			</div>
+			<div class="col-xs-1 hidden-xs hidden-sm">
+				<button onclick="themeHide()" style="color: white;background-color: black;border: none;">
+					<span class="glyphicon glyphicon-remove"></span>
+				</button>
+			</div>
+		</div> 
+		<div id="color_one" class="row" style="margin-top: 2%;">
+			<div class="col-xs-3 col-xs-offset-1">
+				<button onclick="changeColor('FFFFFF')" style="background-color: #FFFFFF;color: black;" class="btn btn-sm btn-primary btn-block">白色</button>
+			</div>
+			<div class="col-xs-4">
+				<button onclick="changeColor('C7EDCC')" style="background-color: #C7EDCC;color: black;" class="btn btn-sm btn-primary btn-block">护眼</button>
+			</div>
+			<div class="col-xs-3">
+				<button onclick="changeColor('333333')" style="background-color: #333333;color: white;" class="btn btn-sm btn-primary btn-block">夜间</button>
+			</div>
+		</div> 
+		<div id="color_two" class="row" style="margin-top: 1%;">
+			<div class="col-xs-3 col-xs-offset-1">
+				<button onclick="changeColor('FAF9DE')" style="background-color: #FAF9DE;color: black;" class="btn btn-sm btn-primary btn-block">杏仁黄</button>
+			</div>
+			<div class="col-xs-4">
+				<button onclick="changeColor('FFF2E2')" style="background-color: #FFF2E2;color: black;" class="btn btn-sm btn-primary btn-block">秋叶褐</button>
+			</div>
+			<div class="col-xs-3">
+				<button onclick="changeColor('FDE6E0')" style="background-color: #FDE6E0;color: black;" class="btn btn-sm btn-primary btn-block">胭脂红</button>
+			</div>
+		</div> 
+		<div id="color_three" class="row" style="margin-top: 1%;">
+			<div class="col-xs-3 col-xs-offset-1">
+				<button onclick="changeColor('E3EDCD')" style="background-color: #E3EDCD;color: black;" class="btn btn-sm btn-primary btn-block">青草绿</button>
+			</div>
+			<div class="col-xs-4">
+				<button onclick="changeColor('DCE2F1')" style="background-color: #DCE2F1;color: black;" class="btn btn-sm btn-primary btn-block">海天蓝</button>
+			</div>
+			<div class="col-xs-3">
+				<button onclick="changeColor('E9EBFE')" style="background-color: #E9EBFE;color: black;" class="btn btn-sm btn-primary btn-block">葛巾紫</button>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

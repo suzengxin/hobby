@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>${keyWord}_天狼云社区搜索结果</title>
+
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+	
+	<!-- 引入Bootstrap核心文件 -->
+	<link href="/bootstrap/css/bootstrap.min.css" rel='stylesheet' type='text/css' />
+	
+	<!-- jQuery(Bootstrap的JavaScript插件需要引入jQuery，务必在bootstrap.min.js之前引入) -->
+	<script src="/bootstrap/js/jquery.min.js"></script>
+	
+	<!-- 包括所有已编译的JS插件 -->
+	<script src="/bootstrap/js/bootstrap.min.js"></script>
+	
+	<!-- 图标 -->
+	<link rel="shortcut icon" href="/images/icon.ico">  
+	<link rel="Bookmark" href="/images/icon.ico">
+	<link href="/tianlang/css/common.css" rel='stylesheet' type='text/css' />
+	<script src="/tianlang/js/common.js"></script>
+</head>
+<body>
+	<!-- 导航 -->
+	<div id="nav" class="navbar navbar-inverse" role="navigation"></div>
+
+	<!-- logo -->
+	<div class="jumbotron">
+		<div id="logo">
+			<h1 class="text-center"><a href="/client/know">天狼云<span>社区</span></a></h1>
+		</div>
+		<!-- search -->
+		<div class="row">
+			<div class="col-xs-10 col-xs-offset-1
+					col-md-6 col-md-offset-3" style="margin-top: 1%;">
+				<form action="/client/search" method="get">
+			        <div class="input-group input-group-md">
+			            <input type="hidden" name="type" value="know">
+			            <input type="text" name="keyWord" class="form-control" value="${keyWord}">
+			            <span class="input-group-btn">
+			            	<button class="btn btn-default" style="background: #efefef;" type="submit">搜索</button>
+			            </span>
+			        </div>
+			    </form>
+			</div>
+		</div><!-- search END -->
+	</div>
+	
+	<!-- content -->
+	<div class="row" id="content" style="margin: 20px 5px 0px 5px;">
+		<div class="col-md-10 col-md-offset-1">
+			<#if list?? && (list?size > 0) >
+				<#list list as s>
+					<div class="jumbotron">
+				        <h4 style="text-indent: 2em;">
+				        	<a onclick="page('${s.id}')">
+				        		${s.title}
+				        	</a>
+				        </h4>
+				        <p style="padding-left:5px;padding-right:5px; text-indent: 2em;font-size: 15px;word-wrap:break-word;word-break:break-all;color: black;">${s.content}</p>
+					</div>
+				</#list>
+			<#else>
+				<div class="jumbotron">
+			        <h4 class="text-center" style="color: black;">未查询到数据</h4>
+				</div>
+	        </#if>
+	        <input id="start" type="hidden" value="${list?size}">
+			<input id="type" type="hidden" value="${type}">
+			<input id="keyWord" type="hidden" value="${keyWord}">
+		</div>
+	</div>
+	
+	<#if total != 0>
+		<!-- pageable -->
+		<div class="row text-center">
+			<div class="col-xs-12">
+				<nav aria-lable="Page navigation" >
+					<ul class="pagination pagination-md">
+						<#if current == 1>
+						  <li class="disabled"><a>首页</a>
+						<#else>
+						  <li><a href="/client/search?type=${type}&keyWord=${keyWord}&pageNumber=1">首页</a></li>
+						  <li><a href="/client/search?type=${type}&keyWord=${keyWord}&pageNumber=${(current-1)?c}" aria-label="Previous"><span aria-hidden="true">&laquo;</span></a></li>
+						</#if>
+						
+						
+						<#if current != 1>
+		                  <li><a href="/client/search?type=${type}&keyWord=${keyWord}&pageNumber=${(current-1)?c}">${(current-1)?c}</a></li>
+		                <#else>
+		                  <li class="disabled"><a>*</a>
+		                </#if>
+		                
+						<li class="active"> <a href="/client/search?type=${type}&keyWord=${keyWord}&pageNumber=${current?c}">${current?c}</a></li>
+						
+						<#if current != total>
+		                  <li><a href="/client/search?type=${type}&keyWord=${keyWord}&pageNumber=${(current+1)?c}">${(current+1)?c}</a></li>
+		                <#else>
+		                  <li class="disabled"><a>*</a>
+		                </#if>
+						
+						
+						<#if current == total>
+		                  <li class="disabled"><a>末页</a>
+		                <#else>
+		                  <li><a href="/client/search?type=${type}&keyWord=${keyWord}&pageNumber=${(current+1)?c}" aria-label="Next"><span aria-hidden="true">&raquo;</span></a></li>
+		                  <li><a href="/client/search?type=${type}&keyWord=${keyWord}&pageNumber=${total?c}">末页</a></li>
+		                </#if>
+					</ul>
+				</nav>
+			</div>
+			<div class="col-xs-12">
+				当前第<span>${current}</span>页，
+				总共<span>${total}</span>页，
+				总共<span>${count}</span>条记录
+			</div>
+		</div>
+	</#if>
+	
+	
+	<!--footer--->
+	<div id="footer" class="footer text-center"></div>
+</body>
+<style type="text/css">
+	select {
+		border: none;
+		background: none;
+		margin: 0 10px -1px 10px;
+	}
+	option {
+		margin: 0 5px 0;
+		background: #efefef;
+	}
+</style>
+<script type="text/javascript">
+	$(function(){
+		$("em").css("color","red");
+		var keyWord = $("#keyWord").val();
+		$('input[name="keyWord"]').val(keyWord);
+		style();
+	})
+	$(window).resize(function () {//当浏览器大小变化时         
+		style();
+	});
+	function page (id) {
+		var type = $("#type").val();
+		window.open("/client/"+type+"/content?id="+id);
+		//location = "/client/search/page?type="+type+"&id="+id;
+	}
+	function style () {
+		var w = document.documentElement.clientWidth;
+		var h = document.documentElement.clientHeight;
+		var start = $("#start").val();
+		if(start != 0){
+			$("#footer").css("margin-top","100px");
+		} else {
+			if(w>=1200 && h>=900){
+				$("#before").remove();
+				$("#footer").before("<div id='before' style='width: "+w+"px;height: "+h*0.65+"px;'></div>");
+			}else{
+				$("#footer").css("margin-top","150px");
+			}
+		}
+	}
+</script> 
+</html>
