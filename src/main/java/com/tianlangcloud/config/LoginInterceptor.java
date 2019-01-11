@@ -35,9 +35,9 @@ public class LoginInterceptor extends HandlerInterceptorAdapter{
 		//请求白名单
 		List<String> whiteList = new ArrayList<>();
 		whiteList.add("http://127.0.0.1:80/?null");//登录页
-		whiteList.add("http://172.16.87.176:80/?null");//登录页
-		whiteList.add("http://116.196.75.136:80/?null");//登录页
 		whiteList.add("http://www.tianlangcloud.com:80/?null");//登录页
+		whiteList.add("http://127.0.0.1:443/?null");//登录页
+		whiteList.add("http://www.tianlangcloud.com:443/?null");//登录页
 		
 		//在请求白名单中放行
 		for (String w : whiteList) {
